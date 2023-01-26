@@ -15,14 +15,19 @@ export default function SignUp() {
     function sendData() {
         setLoading(false);
         const body = {name, email, password};
-        const request = axios.post('http://localhost:4000/sign-up', body);
 
-        request.then(() => {
+        axios.post('http://localhost:4000/sign-up', body)
+        .then(() => {
             setLoading(true);
             navigate('/');
-        });
-        request.catch(()=> {
-            alert('Erro no cadastro, tente novamente');
+        })
+        .catch(error => {
+            if (error.response.status === 409) {
+                alert('Email já cadastrado, insira um e-mail diferente');
+            } else {
+                alert('Erro no cadastro, tente novamente');
+            }
+            
             setLoading(true);
         })
     }

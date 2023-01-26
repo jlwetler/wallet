@@ -20,6 +20,7 @@ export default styled.div `
         }
         input::placeholder {
             font-family: 'Righteous';
+            font-size: 18px;
         }
         img {
             width: 205px;

@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useContext } from 'react';
@@ -18,12 +17,13 @@ export default function Login() {
     function sendLogin() {
         setLoading(true);
         const body = {email, password};
-        const request = axios.post('http://localhost:4000/login', body);
-        request.then((response) => {
+        axios.post('http://localhost:4000/login', body)
+        .then((response) => {
             setUser(response.data);
-            navigate('/today');
-        });
-        request.catch(() => {
+            navigate('/wallet');
+        })
+        .catch(error => {
+            console.log(error.response.status)
             alert('Email ou senha incorretos');
             setLoading(false);
         });
