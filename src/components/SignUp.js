@@ -8,6 +8,7 @@ import Container from './Container';
 export default function SignUp() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [name, setName] = useState("");
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
@@ -54,6 +55,13 @@ export default function SignUp() {
                 type="password" 
                 placeholder="Senha" 
                 value={password} 
+                onChange={e => setPassword(e.target.value)} 
+                required
+            />
+                        <input 
+                type="password" 
+                placeholder="Confirme a senha" 
+                value={confirmPassword} 
                 onChange={e => setPassword(e.target.value)} 
                 required
             />

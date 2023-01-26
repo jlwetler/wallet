@@ -10,10 +10,11 @@ import UserContext from './contexts/UserContext';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Wallet from './components/Wallet'
+import AddTransaction from './components/AddTransaction'
 
 export default function App() {
   const [user, setUser] = useState({});
-
+  const [moneyEntry, setMoneyEntry] =useState(true)
   return (
     <>
       <Router>
@@ -22,7 +23,8 @@ export default function App() {
           <Routes>
             <Route path='/' element={<Login />} />
             <Route path='sign-up' element={<SignUp />} />
-            <Route path='wallet' element={<Wallet />} />
+            <Route path='wallet' element={<Wallet setMoneyEntry={setMoneyEntry}/>} />
+            <Route path='transaction' element={<AddTransaction moneyEntry={moneyEntry}/>} />
           </Routes>
         </UserContext.Provider>
       </Router>

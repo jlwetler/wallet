@@ -1,12 +1,11 @@
 import styled from "styled-components";
 
 export default styled.div `
-        height: 100vh;
+        height: calc(100vh - 50px);
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        flex-wrap: wrap;
         span {
             color: #ffffff;
         }
@@ -29,7 +28,6 @@ export default styled.div `
         }
         h1 {
             font-size: 25px;
-            color: #ffffff;
         }
         button {
             font-family: 'Righteous';
