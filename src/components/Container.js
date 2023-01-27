@@ -6,9 +6,6 @@ export default styled.div `
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        span {
-            color: #ffffff;
-        }
         input {
             padding: 10px;
             width: 303px;
@@ -40,7 +37,7 @@ export default styled.div `
             color: #ffffff;
             width: 303px;
             height: 45px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             border: none;
             disabled {
                 opacity: 0.1;

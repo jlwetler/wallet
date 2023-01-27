@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import UserContext from '../contexts/UserContext';
 import Loading from './Loading';
 import Container from './Container';
@@ -13,6 +13,14 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
+
+    useEffect(() => {
+        if(localStorage.length !== 0) {
+            const userData = localStorage.getItem("user");
+            setUser(JSON.parse(userData));
+            navigate('/wallet');
+        }
+    },[])
 
     function sendLogin() {
         setLoading(true);

@@ -14,6 +14,14 @@ export default function SignUp() {
     const navigate = useNavigate();
 
     function sendData() {
+        if(password !== confirmPassword) {
+            alert('As senhas não conferem, tente novamente.')
+            setName("");
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
+            return;
+        }
         setLoading(false);
         const body = {name, email, password};
 
@@ -28,7 +36,6 @@ export default function SignUp() {
             } else {
                 alert('Erro no cadastro, tente novamente');
             }
-            
             setLoading(true);
         })
     }
@@ -58,11 +65,11 @@ export default function SignUp() {
                 onChange={e => setPassword(e.target.value)} 
                 required
             />
-                        <input 
+            <input 
                 type="password" 
                 placeholder="Confirme a senha" 
                 value={confirmPassword} 
-                onChange={e => setPassword(e.target.value)} 
+                onChange={e => setConfirmPassword(e.target.value)} 
                 required
             />
             <button 

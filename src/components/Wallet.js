@@ -1,35 +1,50 @@
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import UserContext from '../contexts/UserContext';
+import { IoIosLogOut, IoMdTrash } from "react-icons/io";
 
-export default function Wallet({ setMoneyEntry }) {
-    const { user } = useContext(UserContext);
+export default function Wallet({ setMoneyEntry, transactions }) {
+    const { user, setUser } = useContext(UserContext);
+    const navigate = useNavigate();
 
-    console.log(`Logado, ${user.name}, ${user.email}, ${user.token}`)
+    if(localStorage.length === 0) {
+        localStorage.setItem('user', JSON.stringify(user));
+        const userData = localStorage.getItem("user");
+        setUser(JSON.parse(userData));
+    } 
 
+    function logout() {
+        localStorage.removeItem('user');
+        navigate('/');
+    }
+
+    function deleteTransaction() {
+
+    }
 
     return (
         <WalletContainer>
             <section>
-                Olá, {user.name}
+                <div>Olá, {user.name}</div>
+                <IoIosLogOut size={32} onClick={logout}/>
             </section>
             <Transactions>
                 <div>
                     <p>29/11 Salário</p>
-                    <p>6000,00</p>
+                    <p>6000,00<IoMdTrash onClick={deleteTransaction} className='icon'/></p>
                 </div>
                 <div>
                     <p>29/11 Salário</p>
-                    <p>6000,00</p>
+                    <p>6000,00<IoMdTrash className='icon'/></p>
                 </div>
                 <div>
                     <p>29/11 Salário</p>
-                    <p>6000,00</p>
+                    <p>6000,00<IoMdTrash className='icon'/></p>
                 </div>
                 <div>
                     <p>29/11 Salário</p>
-                    <p>6000,00</p>
+                    <p>6000,00<IoMdTrash className='icon'/></p>
                 </div>
                 <section>
                     <p className='saldo'>SALDO</p>
@@ -37,7 +52,7 @@ export default function Wallet({ setMoneyEntry }) {
                 </section>
             </Transactions>
             <Footer>
-                <Link to='/transaction/' onClick={() => setMoneyEntry(true)}>
+                <Link to='/transaction' onClick={() => setMoneyEntry(true)}>
                     <section>
                         <div>+</div>
                         <span>Nova entrada</span>
@@ -62,11 +77,14 @@ const WalletContainer = styled.div`
         justify-content: space-between;
         margin-top: 10px;
     }
+    .logout {
+        font-weight: bold;
+    }
 `;
 
 const Transactions = styled.div`
     position: relative;
-    padding: 20px;
+    padding: 20px 0px 20px 20px;
     background: #fff;
     color: #000;
     font-size:20px;
@@ -77,7 +95,7 @@ const Transactions = styled.div`
     div {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 10px;
+        margin-bottom: 18px;
         p{
             display: flex;
             flex-wrap: wrap;
@@ -95,7 +113,10 @@ const Transactions = styled.div`
     .value {
         position: absolute;
         bottom: 20px;
-        right: 20px;
+        right: 28px;
+    }
+    .icon {
+        margin: 0 2px 0 6px;
     }
 `;
 
@@ -114,6 +135,10 @@ const Footer = styled.div`
         display: flex;
         justify-content: space-between;
         box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    }
+    section:hover {
+        cursor: pointer;
+        background: purple;
     }
     div {
         display: flex;
