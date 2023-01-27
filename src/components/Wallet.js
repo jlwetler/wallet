@@ -1,11 +1,16 @@
 import { Link, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { useState, useContext, useEffect } from 'react';
-import UserContext from '../contexts/UserContext';
 import { IoIosLogOut, IoMdTrash } from "react-icons/io";
+import UserContext from '../contexts/UserContext';
+import Transactions from './Transactions';
+import axios from 'axios';
+import dayJS from "dayjs";
+import styled from "styled-components";
 
-export default function Wallet({ setMoneyEntry, transactions }) {
+export default function Wallet({ setMoneyEntry, transactions, setTransactions }) {
+    
     const { user, setUser } = useContext(UserContext);
+    const [ balance, setBalance ] = useState(0);
     const navigate = useNavigate();
 
     if(localStorage.length === 0) {
@@ -14,13 +19,43 @@ export default function Wallet({ setMoneyEntry, transactions }) {
         setUser(JSON.parse(userData));
     } 
 
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${user.token}`
+        }
+    }
+
+    useEffect(()=> {
+        console.log(user.token)
+        axios.get('http://localhost:4000/transactions', config)
+        .then(response => {
+            setTransactions(response.data);
+            setBalance(calculateBalance(transactions));
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    },[transactions])
+
+    function calculateBalance(transactions) {
+        return transactions.reduce((total, { value, moneyEntry }) => 
+            moneyEntry ? total += value : total -= value
+        ,0)
+    }
+
+
     function logout() {
         localStorage.removeItem('user');
         navigate('/');
     }
 
-    function deleteTransaction() {
+    function deleteTransaction(id) {
+        if(window.confirm("Tem certeza que deseja deletar a transação?")) {
 
+            axios.delete(`http://localhost:4000/transactions/${id}`, config)
+            
+
+        }
     }
 
     return (
@@ -30,25 +65,23 @@ export default function Wallet({ setMoneyEntry, transactions }) {
                 <IoIosLogOut size={32} onClick={logout}/>
             </section>
             <Transactions>
-                <div>
-                    <p>29/11 Salário</p>
-                    <p>6000,00<IoMdTrash onClick={deleteTransaction} className='icon'/></p>
-                </div>
-                <div>
-                    <p>29/11 Salário</p>
-                    <p>6000,00<IoMdTrash className='icon'/></p>
-                </div>
-                <div>
-                    <p>29/11 Salário</p>
-                    <p>6000,00<IoMdTrash className='icon'/></p>
-                </div>
-                <div>
-                    <p>29/11 Salário</p>
-                    <p>6000,00<IoMdTrash className='icon'/></p>
-                </div>
+                {transactions.map(t => 
+                    <div>
+                        <p>
+                            <p className='date'>{dayJS(t.date).format("DD/MM/YY")} </p> {t.description}
+                        </p>
+                        <p>
+                            <p className={t.moneyEntry ? 'green' : 'red'}>{t.value}</p>
+                            <IoMdTrash onClick={ () => deleteTransaction(t.id) } className='icon'/>
+                        </p>
+                    </div>
+                )}
+
                 <section>
                     <p className='saldo'>SALDO</p>
-                    <p className='value'>6000,00</p>
+                    <p className={balance >= 0 ? ' value green' : ' value red'}>
+                        {Math.abs(balance)}
+                    </p>
                 </section>
             </Transactions>
             <Footer>
@@ -82,44 +115,6 @@ const WalletContainer = styled.div`
     }
 `;
 
-const Transactions = styled.div`
-    position: relative;
-    padding: 20px 0px 20px 20px;
-    background: #fff;
-    color: #000;
-    font-size:20px;
-    margin-top: 30px;
-    height: 60vh;
-    border-radius: 8px;
-    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-    div {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 18px;
-        p{
-            display: flex;
-            flex-wrap: wrap;
-        }
-    }
-    section {
-        display: flex;
-        justify-content: space-between;
-    }
-    .saldo {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-    }
-    .value {
-        position: absolute;
-        bottom: 20px;
-        right: 28px;
-    }
-    .icon {
-        margin: 0 2px 0 6px;
-    }
-`;
-
 const Footer = styled.div`
     margin-top: 20px;
     display: flex;
@@ -129,7 +124,7 @@ const Footer = styled.div`
         align-items: center;
         padding: 7px;
         background: #A328D6;
-        width: 165px;
+        width: 155px;
         height: 60px;
         border-radius: 8px;
         display: flex;
@@ -144,12 +139,12 @@ const Footer = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 30px;
-        height: 30px;
+        width: 27px;
+        height: 27px;
         border-radius: 50%;
-        border: 3px solid #fff
+        border: 2px solid #fff
     }
     span {
-        font-size: 18px;
+        font-size: 16px;
     }
 `;

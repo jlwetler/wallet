@@ -15,7 +15,7 @@ import AddTransaction from './components/AddTransaction'
 export default function App() {
   const [user, setUser] = useState({});
   const [moneyEntry, setMoneyEntry] = useState(true);
-  const [transactions, setTransactions] = useState({});
+  const [transactions, setTransactions] = useState([]);
   return (
     <>
       <Router>
@@ -28,11 +28,13 @@ export default function App() {
               <Wallet 
                 setMoneyEntry= { setMoneyEntry } 
                 transactions= { transactions }
+                setTransactions= { setTransactions }
               />
             }/>
             <Route path='transaction' element={
               <AddTransaction 
                 moneyEntry={ moneyEntry }
+                transactions= { transactions }
                 setTransactions= { setTransactions }
               />
             }/>

@@ -4,7 +4,7 @@ import { useState, useContext } from 'react';
 import UserContext from '../contexts/UserContext';
 import axios from 'axios';
 
-export default function AddTransaction({ moneyEntry, setTransactions }) {
+export default function AddTransaction({ moneyEntry, transactions, setTransactions }) {
     const { user } = useContext(UserContext);
     const [ value, setValue] = useState(null);
     const [ description, setDescription] = useState("");
@@ -23,7 +23,8 @@ export default function AddTransaction({ moneyEntry, setTransactions }) {
         console.log(body);
         console.log(config);
         axios.post('http://localhost:4000/transactions', body, config)
-        .then(() => {
+        .then(response => {
+            setTransactions([...transactions], response.data);
             navigate('/wallet');
         })
         .catch(()=>{
