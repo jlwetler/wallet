@@ -2,10 +2,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useState, useContext } from 'react';
 import UserContext from '../contexts/UserContext';
+import TransactionsContext from '../contexts/TransactionsContext';
 import axios from 'axios';
 
-export default function AddTransaction({ moneyEntry, transactions, setTransactions }) {
+export default function AddTransaction({ moneyEntry }) {
     const { user } = useContext(UserContext);
+    const { transactions, setTransactions } = useContext(TransactionsContext);
     const [ value, setValue] = useState(null);
     const [ description, setDescription] = useState("");
     const [date, setDate] = useState();
@@ -20,8 +22,6 @@ export default function AddTransaction({ moneyEntry, transactions, setTransactio
     function sendTransaction() {
         const userId = user.id;
         const body = { value, description, moneyEntry, date, userId };
-        console.log(body);
-        console.log(config);
         axios.post('http://localhost:4000/transactions', body, config)
         .then(response => {
             setTransactions([...transactions], response.data);

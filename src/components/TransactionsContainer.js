@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 export default styled.div `
+    display: flex;    
     position: relative;
-    padding: 20px 0px 20px 15px;
+    padding: 0 0 15px 15px;
     background: #fff;
     color: #000;
     font-size: 16px;
@@ -13,15 +14,18 @@ export default styled.div `
     div {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 18px;
-        p {
+        margin-bottom: 15px;
+        aside {
             display: flex;
             margin-right: 3px;
         }
     }
     section {
-        display: flex;
-        justify-content: space-between;
+        overflow-y: scroll;
+        display: inline-block;
+        padding-top: 15px;
+        max-height: 53vh; 
+        width: 100%;
     }
     .date {
         color: gray;
@@ -29,13 +33,13 @@ export default styled.div `
     }
     .saldo {
         position: absolute;
-        bottom: 20px;
-        left: 20px;
+        bottom: 15px;
+        left: 15px;
     }
     .value {
         position: absolute;
-        bottom: 20px;
-        right: 28px;
+        bottom: 15px;
+        right: 25px;
     }
     .icon {
         margin-left: 8px;
