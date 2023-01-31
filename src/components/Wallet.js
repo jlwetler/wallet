@@ -1,18 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useContext, useEffect } from 'react';
-import { IoIosLogOut, IoMdTrash } from "react-icons/io";
+import { useContext } from 'react';
+import { IoIosLogOut } from "react-icons/io";
+import TransactionsContainer from './TransactionsContainer';
+import styled from "styled-components";
 import UserContext from '../contexts/UserContext';
 import TransactionsContext from '../contexts/TransactionsContext';
-import TransactionsContainer from './TransactionsContainer';
-import axios from 'axios';
-import dayJS from "dayjs";
-import styled from "styled-components";
 
 export default function Wallet({ setMoneyEntry }) {
     
     const { user, setUser } = useContext(UserContext);
-    const { transactions, setTransactions } = useContext(TransactionsContext);
-    const [ balance, setBalance ] = useState(0);
+    const { setTransactions } = useContext(TransactionsContext);
     const navigate = useNavigate();
 
     if(localStorage.length === 0) {
@@ -21,50 +18,10 @@ export default function Wallet({ setMoneyEntry }) {
         setUser(JSON.parse(userData));
     } 
 
-    const config = {
-        headers: {
-            "Authorization": `Bearer ${user.token}`
-        }
-    }
-
-    useEffect(getTransactions,[])
-
-    useEffect(() => {
-        setBalance(calculateBalance(transactions));
-    },[transactions])
-
-    function getTransactions() {
-        axios.get('http://localhost:4000/transactions', config)
-        .then( (response) => {
-            setTransactions(response.data);
-           
-        })
-        .catch(error => {
-            if (error.response.status === 401) {
-                alert('Sessão encerrada, faça o login novamente');
-                navigate('/');
-            }
-        })
-    }
-
-    function calculateBalance(transactions) {
-        return transactions.reduce((total, { value, moneyEntry }) => 
-            moneyEntry ? total += value : total -= value
-        ,0)
-    }
-
     function logout() {
         localStorage.removeItem('user');
+        setUser({})
         navigate('/');
-    }
-
-    function deleteTransaction(id) {
-        if(window.confirm("Tem certeza que deseja deletar a transação?")) {
-            
-            axios.delete(`http://localhost:4000/transactions/${id}`, config)
-
-            getTransactions();
-        }
     }
 
     return (
@@ -73,29 +30,9 @@ export default function Wallet({ setMoneyEntry }) {
                 <h1>Olá, {user.name}</h1>
                 <IoIosLogOut size={32} onClick={logout}/>
             </section>
-            <TransactionsContainer>
-                <section>
-                {transactions.length === 0 ? <>Nenhuma transação para exibir ainda</> : 
-                    transactions.map(t => 
-                        <div key={t.id}>
-                            <aside>
-                                <h2 className='date'>{dayJS(t.date).format("DD/MM/YY")} </h2> {t.description}
-                            </aside>
-                            <aside>
-                                <p className={t.moneyEntry ? 'green' : 'red'}>{t.value}</p>
-                                <IoMdTrash onClick={ () => deleteTransaction(t.id) } className='icon'/>
-                            </aside>
-                        </div>
-                    )
-                }
-                </section>
-                <div>
-                    <p className='saldo'>SALDO</p>
-                    <p className={balance >= 0 ? ' value green' : ' value red'}>
-                        {Math.abs(balance)}
-                    </p>
-                </div>
-            </TransactionsContainer>
+            
+            <TransactionsContainer />
+
             <Footer>
                 <Link to='/add-transaction' onClick={() => setMoneyEntry(true)}>
                     <section>
