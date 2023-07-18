@@ -54,7 +54,7 @@ export default function TransactionsContainer() {
     }
 
     return (
-        <Container>
+        <TransactionsBox>
             <ul>
                 {transactions.length === 0 ? <>Nenhuma transação para exibir ainda</> : 
                     transactions.map(t => 
@@ -76,11 +76,11 @@ export default function TransactionsContainer() {
                     {Math.abs(balance)}
                 </span>
             </div>
-        </Container>
+        </TransactionsBox>
     )
 } 
 
-const Container = styled.div `
+const TransactionsBox = styled.div `
     position: relative;
     padding: 15px 0 15px 15px;
     background: #fff;

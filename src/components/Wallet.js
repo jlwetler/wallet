@@ -4,12 +4,10 @@ import { IoIosLogOut } from "react-icons/io";
 import TransactionsContainer from './TransactionsContainer';
 import styled from "styled-components";
 import UserContext from '../contexts/UserContext';
-import TransactionsContext from '../contexts/TransactionsContext';
 
 export default function Wallet({ setMoneyEntry }) {
     
     const { user, setUser } = useContext(UserContext);
-    const { setTransactions } = useContext(TransactionsContext);
     const navigate = useNavigate();
 
     if(localStorage.length === 0) {
