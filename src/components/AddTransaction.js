@@ -28,9 +28,8 @@ export default function AddTransaction({ moneyEntry }) {
             navigate('/wallet');
         })
         .catch(()=>{
-            alert('Erro no servidor')
+            alert('Erro no servidor, tente novamente mais tarde')
         })
-    
     }
 
 

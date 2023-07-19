@@ -6,7 +6,6 @@ import Loading from './Loading';
 import Container from './Container';
 import logo from '../images/logo.jpg';
 
-
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
